@@ -2,9 +2,16 @@
 <html lang = "en">
 	<head>
 		<meta charset = "utf-8">
-		<title>My page</title>
+		<title>Jigsaw</title>
+
+		<script src="content/js/paper.js" type="text/javascript"></script>
+        <script type="text/paperscript" canvas="canvas">
+            var bob = new Raster('Bob');
+            bob.position = view.center;
+        </script>
 	</head>
 	<body>
-
+		<canvas id="canvas" class="canvas" resize></canvas>
+        <img id="Bob" src="content/images/Bob.png" style="display: none;">
 	</body>
 </html>
