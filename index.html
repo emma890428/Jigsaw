@@ -2,146 +2,78 @@
 <html>
 	<head>
 		<title>Jigsaw Puzzle</title>
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="js/jcanvas.min.js"></script>
 	</head>
 	<body>
 
-		<canvas id="c" width="640" height="480" style="border:1px solid #d3d3d3;">
-		  Your browser does not support the HTML5 canvas tag.
-        </canvas>
+		<canvas id="c" width="640" height="600" style="border:1px solid #d3d3d3;">
+		Your browser does not support the HTML5 canvas tag.</canvas>
+
 		
 		<script>
-            
-            clipAll(4,3);
+			// Grab the Canvas and Drawing Context
+var canvas = document.getElementById('c');
+var ctx = canvas.getContext('2d');
 
-            //clip the entire image
-            function clipAll(cols,rows){
-                var shapeValues = getRandomShapes(cols,rows);
-                //alert(shapeValues[0].topTab);
-                for (var i=0; i<cols*rows; i++){
-                    var tab = new Array();
-                    tab = [shapeValues[i].topTab,shapeValues[i].rightTab,shapeValues[i].bottomTab,shapeValues[i].leftTab];
-                    clipT(tab,i%cols*160,Math.floor(i/cols)*160);
-                }
-            }
-            
-            //clip to generate one tile
-            function clipT(tab,x,y){
-                // Grab the Canvas and Drawing Context
-                var canvas = document.getElementById('c');
-                var ctx = canvas.getContext('2d');
 
-                // Create an image element
-                var img = document.createElement('IMG');
 
-                // When the image is loaded, draw it
-                img.onload = function () {
+// Create an image element
 
-                    // Save the state, so we can undo the clipping
-                    ctx.save();
-                    var w=160;
-                    //var tab=[0,-1,-1,0]; //clockwise, valley -1, hill 1, flat 0
-                    // Create a shape, of some sort
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
+var img = document.createElement('IMG');
 
-                    // Top
-                    ctx.quadraticCurveTo(x+w*3/8,y+tab[0]*w/6,x+w/3,y);
-                    ctx.bezierCurveTo(x+w/6, y-tab[0]*w/4,x+w*5/6,y-tab[0]*w/4,x+w*2/3,y);
-                    ctx.quadraticCurveTo(x+w*5/8,y+tab[0]*w/6,x+w,y);
-                    
-                    //Right
-                    x=x+w;
-                    ctx.quadraticCurveTo(x-tab[1]*w/6,y+w*3/8,x,y+w/3);
-                    ctx.bezierCurveTo(x+tab[1]*w/4, y+w/6,x+tab[1]*w/4,y+w*5/6,x,y+w*2/3);
-                    ctx.quadraticCurveTo(x-tab[1]*w/6,y+w*5/8,x,y+w);
-                    
-                    //Bottom
-                    y=y+w;
-                    ctx.quadraticCurveTo(x-w*3/8,y-tab[2]*w/6,x-w/3,y);
-                    ctx.bezierCurveTo(x-w/6, y+tab[2]*w/4,x-w*5/6,y+tab[2]*w/4,x-w*2/3,y);
-                    ctx.quadraticCurveTo(x-w*5/8,y-tab[2]*w/6,x-w,y);
-                    
-                    //Left
-                    x=x-w;
-                    ctx.quadraticCurveTo(x+tab[3]*w/6,y-w*3/8,x,y-w/3);
-                    ctx.bezierCurveTo(x-tab[3]*w/4, y-w/6,x-tab[3]*w/4,y-w*5/6,x,y-w*2/3);
-                    ctx.quadraticCurveTo(x+tab[3]*w/6,y-w*5/8,x,y-w);    
-                    
-                    ctx.stroke();
-                    ctx.closePath();
-                    // Clip to the current path
-                    ctx.clip();
-                    
-                    
-                    ctx.drawImage(img, 0, 0);
-                    
-                    // Undo the clipping
-                    ctx.restore();
-                }
-                // Specify the src to load the image
-                img.src = "https://lh5.googleusercontent.com/-2YyYO0T3_NA/Ub4nkGOb3AI/AAAAAAAABLg/0bJ9jVqVfuE/w640-h480-no/tiger.jpg";
-            }
+// When the image is loaded, draw it
+img.onload = function () {
 
-            //Get random shapes
-            function getRandomShapes(cols, rows){
-                var shapeArray = new Array();
+    // Save the state, so we can undo the clipping
+    ctx.save();
+    var x=0,y=0, w=160;
+    var tab=[0,-1,-1,0]; //clockwise, valley -1, hill 1, flat 0
+    // Create a shape, of some sort
+    ctx.beginPath();
+    ctx.moveTo(x, y);
 
-                for(var r=0; r<rows; r++){
-                    for(var c=0; c<cols; c++){
-                        var topTab = undefined;
-                        var rightTab = undefined;
-                        var bottomTab = undefined;
-                        var leftTab = undefined;
+    // Top
+    ctx.quadraticCurveTo(x+w*3/8,y+tab[0]*w/6,x+w/3,y);
+    ctx.bezierCurveTo(x+w/6, y-tab[0]*w/4,x+w*5/6,y-tab[0]*w/4,x+w*2/3,y);
+    ctx.quadraticCurveTo(x+w*5/8,y+tab[0]*w/6,x+w,y);
+    
+    //Right
+    x=x+w;
+    ctx.quadraticCurveTo(x-tab[1]*w/6,y+w*3/8,x,y+w/3);
+    ctx.bezierCurveTo(x+tab[1]*w/4, y+w/6,x+tab[1]*w/4,y+w*5/6,x,y+w*2/3);
+    ctx.quadraticCurveTo(x-tab[1]*w/6,y+w*5/8,x,y+w);
+    
+    //Bottom
+    y=y+w;
+    ctx.quadraticCurveTo(x-w*3/8,y-tab[2]*w/6,x-w/3,y);
+    ctx.bezierCurveTo(x-w/6, y+tab[2]*w/4,x-w*5/6,y+tab[2]*w/4,x-w*2/3,y);
+    ctx.quadraticCurveTo(x-w*5/8,y-tab[2]*w/6,x-w,y);
+    
+    //Left
+    x=x-w;
+    ctx.quadraticCurveTo(x+tab[3]*w/6,y-w*3/8,x,y-w/3);
+    ctx.bezierCurveTo(x-tab[3]*w/4, y-w/6,x-tab[3]*w/4,y-w*5/6,x,y-w*2/3);
+    ctx.quadraticCurveTo(x+tab[3]*w/6,y-w*5/8,x,y-w);    
+    
+    ctx.stroke();
+    
+    ctx.closePath();
+    // Clip to the current path
+    ctx.clip();
+    
+    
+    ctx.drawImage(img, 0, 0);
+    
+    // Undo the clipping
+    ctx.restore();
+}
 
-                        if(r == 0)
-                            topTab = 0;
-                        if(r == rows - 1)
-                            bottomTab = 0;
-                        if(c == 0)
-                            leftTab = 0;
-                        if(c == cols - 1)
-                            rightTab = 0;
+// Specify the src to load the image
+img.src = "https://lh5.googleusercontent.com/-2YyYO0T3_NA/Ub4nkGOb3AI/AAAAAAAABLg/0bJ9jVqVfuE/w640-h480-no/tiger.jpg";
 
-                        shapeArray.push(
-                        {
-                            topTab: topTab,
-                            rightTab: rightTab,
-                            bottomTab: bottomTab,
-                            leftTab: leftTab
-                        });
-                    }
-                }
-
-                for (var r=0; r<rows; r++){
-                    for(var c=0; c<cols; c++){
-                        var shape = shapeArray[r * cols + c];
-
-                        var shapeRight = (c < cols - 1) ? shapeArray[r*cols + (c + 1)] : undefined;
-                        var shapeBottom = (r < rows - 1) ? shapeArray[(r + 1) * cols + c] :
-                        undefined;
-
-                        shape.rightTab = (c < cols - 1) ? getRandomTabValue() : shape.rightTab;
-
-                        if (shapeRight)
-                            shapeRight.leftTab = - shape.rightTab;
-
-                        shape.bottomTab = (r < rows - 1) ? 
-                            getRandomTabValue() : shape.bottomTab;
-
-                        if (shapeBottom)
-                            shapeBottom.topTab = - shape.bottomTab;
-                    }
-                }
-
-                return shapeArray;
-            }
-
-            //random value among 1, 0, -1
-            function getRandomTabValue() {
-                return Math.pow(-1, Math.floor(Math.random() * 2));
-            }
 
 		</script>
-
 	</body>
 </html>
